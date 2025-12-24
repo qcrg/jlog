@@ -35,16 +35,42 @@ endif()
 
 if(JLOG_INSTALL)
 	include(GNUInstallDirs)
-
 	include(CMakePackageConfigHelpers)
-	write_basic_package_version_file(
-		jlog-config-version.cmake
-	 	VERSION ${PROJECT_VERSION}
-		COMPATIBILITY SameMajorVersion
+
+	install(
+		TARGETS jlog
+		EXPORT jlog-targets
+		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	)
 
 	install(
-		FILES ${CMAKE_CURRENT_BINARY_DIR}/jlog-config-version.cmake
+		EXPORT jlog-targets
+		FILE jlog-targets.cmake
+		NAMESPACE jlog::
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jlog
+	)
+
+	write_basic_package_version_file(
+		${CMAKE_CURRENT_BINARY_DIR}/jlog-config-version.cmake
+		VERSION ${PROJECT_VERSION}
+		COMPATIBILITY SameMajorVersion
+	)
+
+	configure_package_config_file(
+		${CMAKE_CURRENT_SOURCE_DIR}/cmake/jlog-config.cmake.in
+		${CMAKE_CURRENT_BINARY_DIR}/jlog-config.cmake
+		INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jlog
+		PATH_VARS
+			CMAKE_INSTALL_INCLUDEDIR
+			CMAKE_INSTALL_LIBDIR
+	)
+
+	install(
+		FILES
+			${CMAKE_CURRENT_BINARY_DIR}/jlog-config.cmake
+			${CMAKE_CURRENT_BINARY_DIR}/jlog-config-version.cmake
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jlog
 	)
 
@@ -52,4 +78,5 @@ if(JLOG_INSTALL)
 		FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/jlog.hxx
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	)
+
 endif()
