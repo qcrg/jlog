@@ -66,17 +66,6 @@ namespace jlog {
 	}
 
 	template<typename ...Args>
-	auto log(Level level, Args&&... args) -> void
-	{
-		if (level > config::level)
-			return;
-		auto& out = config::out.get();
-		impl::print_prefix(out, level);
-		bool first = true;
-		((out << args << (first ? (first = false, "") : " ")), ...);
-	}
-
-	template<typename ...Args>
 	auto fatal(std::format_string<Args...> fmt, Args&&... args) -> void
 	{
 		log(Level::fatal, fmt, std::forward<Args>(args)...);

@@ -4,15 +4,22 @@
 #include <doctest/doctest.h>
 #include <sstream>
 
-TEST_CASE("default")
+struct fixture
 {
-	auto tmp = jlog::config::out;
+	fixture() : global_out{jlog::config::out.get()} {
+		jlog::config::out = out;
+	}
 
+	~fixture() {
+		jlog::config::out = global_out;
+	}
+
+	std::ostream& global_out;
 	std::ostringstream out;
-	jlog::config::out = out;
+};
 
+TEST_CASE_FIXTURE(fixture, "default")
+{
 	jlog::info("Hello, world!!");
 	CHECK_FALSE(out.str().empty());
-
-	jlog::config::out = tmp;
 }
