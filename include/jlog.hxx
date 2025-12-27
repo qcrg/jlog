@@ -73,7 +73,7 @@ namespace jlog {
 		auto& out = config::out.get();
 		impl::print_prefix(out, level);
 		bool first = true;
-		((out << args << (first ? "" : " ")), ...);
+		((out << args << (first ? (first = false, "") : " ")), ...);
 	}
 
 	template<typename ...Args>
