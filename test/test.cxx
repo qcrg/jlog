@@ -6,13 +6,13 @@
 
 TEST_CASE("default")
 {
-	auto tmp = jlog::global_out;
+	auto tmp = jlog::config::out;
 
 	std::ostringstream out;
-	jlog::global_out = out;
+	jlog::config::out = out;
 
 	jlog::info("Hello, world!!");
 	CHECK_FALSE(out.str().empty());
 
-	jlog::global_out = tmp;
+	jlog::config::out = tmp;
 }
